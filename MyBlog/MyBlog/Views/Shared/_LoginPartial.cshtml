@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using MyBlog.Models
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        ApplicationDbContext context = new ApplicationDbContext();
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("你好，" + context.Users.FirstOrDefault(user => user.UserName == User.Identity.Name).NickName, "Details", "MyInfo",new { id = User.Identity.GetUserId() }, null)</li>
+        <li>
+            @Html.ActionLink("我的空间", "Index", "Blog", routeValues: null, htmlAttributes: new { title = "进入用户空间" })
+        </li>
+        @if(User.IsInRole("Administrator"))
+        {
+            <li>
+                @Html.ActionLink("管理","Index","Category")
+            </li>
+        }
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">注销</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("注册", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("登录", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

@@ -1,0 +1,43 @@
+﻿@model MyBlog.Models.Attention
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Attention</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FromUser.NickName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToUser.NickName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AttentionId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

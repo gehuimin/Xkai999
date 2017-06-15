@@ -1,0 +1,59 @@
+﻿@model MyBlog.Models.PrivateLetter
+
+@{
+    ViewBag.Title = "阅读私信";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>私信详情</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FromUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ToUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LetterTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LetterTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LetterContent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LetterContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SendedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SendedTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsReaded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsReaded)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("返回我的私信", "Index")
+</p>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MyBlog.Models.Blog>
+
+@{
+    ViewBag.Title = "我的博客";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的博客</h2>
+
+<p>
+    @Html.ActionLink("新博客", "Create", null, new { @class="btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th style="width:15%">
+            @Html.DisplayNameFor(model => model.Category.CategoryName)
+        </th>
+        <th style="width:40%">
+            @Html.DisplayNameFor(model => model.BlogTitle)
+        </th>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.IsPrivate)
+        </th>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.ReadedTimes)
+        </th>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.IsRecommend)
+        </th>
+        <th style="width:15%"></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BlogTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPrivate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReadedTimes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRecommend)
+        </td>
+        <td>
+            @Html.ActionLink("编辑", "Edit", new { id=item.BlogId }) |
+            @Html.ActionLink("详情", "Details", new { id=item.BlogId }) |
+            @Html.ActionLink("删除", "Delete", new { id=item.BlogId })
+        </td>
+    </tr>
+}
+
+</table>

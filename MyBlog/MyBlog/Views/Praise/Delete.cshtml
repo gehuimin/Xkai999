@@ -1,0 +1,47 @@
+﻿@model MyBlog.Models.Praise
+
+@{
+    ViewBag.Title = "删除点赞";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>删除点赞</h2>
+
+<h3>确定删除此点赞?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            点赞人
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            点赞的博客
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Blog.BlogTitle, "Browse", "Blog", new { id = Model.BlogId }, null)
+        </dd>
+
+        <dt>
+            点赞时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PraisedTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回我的点赞", "Index")
+        </div>
+    }
+</div>

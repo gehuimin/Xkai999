@@ -1,0 +1,51 @@
+﻿@model MyBlog.Models.Comment
+
+@{
+    ViewBag.Title = "删除评论";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>删除评论</h2>
+
+<h3>确定删除此评论?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            评论人
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            评论内容
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommContent)
+        </dd>
+
+        <dt>
+            评论的博客
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Blog.BlogTitle, "Browse", "Blog", new { id = Model.BlogId }, null)
+        </dd>
+
+        <dt>
+            评论时间
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回我的评论", "Index")
+        </div>
+    }
+</div>

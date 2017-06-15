@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MyBlog.Models.Attention>
+
+@{
+    ViewBag.Title = "我的关注";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的关注</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            关注人
+        </th>
+        <th>
+            被关注博主
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToUser.NickName)
+        </td>
+        <td>
+            @Html.ActionLink("取消关注", "Delete", new { id=item.AttentionId })
+        </td>
+    </tr>
+}
+
+</table>

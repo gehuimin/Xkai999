@@ -1,0 +1,43 @@
+﻿@model MyBlog.Models.Praise
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Praise</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog.BlogTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Blog.BlogTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FromUser.NickName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PraisedTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PraisedTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PraiseId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

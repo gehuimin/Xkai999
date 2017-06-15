@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MyBlog.Models.PrivateLetter>
+
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "我的私信";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的私信</h2>
+
+<p>
+    @Html.ActionLink("新私信", "Create", new { id = string.Empty, fromUserId = User.Identity.GetUserId() }, new { @class="btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.FromUserId)
+        </th>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.ToUserId)
+        </th>
+        <th style="width:40%">
+            @Html.DisplayNameFor(model => model.LetterTitle)
+        </th>
+        <th style="width:20%">
+            @Html.DisplayNameFor(model => model.SendedTime)
+        </th>
+        <th style="width:10%">
+            @Html.DisplayNameFor(model => model.IsReaded)
+        </th>
+        <th style="width:10%"></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToUser.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LetterTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendedTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsReaded)
+        </td>
+        <td>
+            @Html.ActionLink("阅读", "Details", new { id = item.PrivateLetterId }) |
+            @Html.ActionLink("删除", "Delete", new { id = item.PrivateLetterId })
+        </td>
+    </tr>
+}
+
+</table>

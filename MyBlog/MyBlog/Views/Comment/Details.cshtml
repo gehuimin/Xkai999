@@ -1,0 +1,51 @@
+﻿@model MyBlog.Models.Comment
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog.BlogTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Blog.BlogTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FromUser.NickName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CommContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CommentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

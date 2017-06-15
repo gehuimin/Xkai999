@@ -1,0 +1,33 @@
+﻿@model MyBlog.Models.Category
+
+@{
+    ViewBag.Title = "删除博客分类";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>删除博客分类</h2>
+
+<h3>确定删除此博客分类?</h3>
+<div>
+    <h4>博客分类</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            @Html.ActionLink("返回博客分类", "Index")
+        </div>
+    }
+</div>

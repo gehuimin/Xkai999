@@ -1,0 +1,197 @@
+﻿@model IEnumerable<MyBlog.Models.Blog>
+@using Microsoft.AspNet.Identity 
+
+@{
+    string blogerId = null;
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.Bloger == null)
+{
+    <div class="page-header">
+        <h1 style="padding-left:30px">老猫博客<small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 做一个脱离低级趣味的人！</small></h1>
+    </div>
+}
+else
+{
+    blogerId = ViewBag.Bloger.Id;
+
+    <div class="page-header">
+        <h1 style="padding-left:30px">@ViewBag.Bloger.NickName 的博客</h1>
+        @if (ViewBag.Bloger.Id != User.Identity.GetUserId())
+        {
+            <p style="padding-left:30px">
+                <button id="attentionButton" class="btn btn-default">关注</button>
+                <button id="privateLetterButton" class="btn btn-default"  data-toggle="modal" data-target="#letterModal">私信</button>
+                <button id="messageButton" class="btn btn-default"  data-toggle="modal" data-target="#messageModal">留言</button>
+            </p>
+        }
+    </div>
+}
+
+@foreach (var item in Model)
+{
+    <div class="row" style="border-bottom:1px solid lightgrey;margin:5px">
+        <div class="col-md-1 text-center">
+            <span class="h1 mybadge" style="padding:5px;margin:5px">@item.BlogTitle.Substring(0, 1)</span>
+        </div>
+        <div class="col-md-11">
+            @Html.ActionLink(item.BlogTitle, "Browse", "Blog", new { id = item.BlogId }, new { @style = "font-size:large;padding-top:10px;padding-bottom:10px;padding-left:10px" })
+            @if (item.IsRecommend)
+            {<span class="h4 mybadge" style="padding:2px;margin:2px">荐</span> }
+            <p style="padding-left:10px"><a href="~/Home/Index/@ViewBag.CategoryId?userId=@item.UserId">@item.Bloger.NickName</a>  撰写于 @item.CreatedTime，阅读  @item.ReadedTimes，评论 @item.Comments.Count，点赞 @item.Prarses.Count，打赏合计 @item.Rewards.Sum(r => r.Money) 元。  </p>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="letterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">发私信给博主</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">主题</label>
+                            <div class="col-md-10">
+                                <input id="letterTitle" type="text" class="form-control" style="max-width: 100%" value="" />
+                                <label id="letterTitleValidateMsg"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">私信内容</label>
+                            <div class="col-md-10">
+                                <textarea id="letterContent" class="form-control textarea" rows="5" cols="80" style="max-width: 100%" ></textarea>
+                                <label id="letterContentValidateMsg"></label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="sendLetterButton" type="button" class="btn btn-primary">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">给博主留言</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">留言内容</label>
+                            <div class="col-md-10">
+                                <textarea id="messageContent" class="form-control textarea" rows="5" cols="80" style="max-width: 100%"></textarea>
+                                <label id="messageContentValidateMsg"></label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="sendMessageButton" type="button" class="btn btn-primary">留言</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#attentionButton').click(function () {
+                if($('#attentionButton').text() == "关注"){
+                    $.post(
+                        "/Attention/AddAttention",
+                        { "fromUserId": "@User.Identity.GetUserId()", "toUserId": "@blogerId" },
+                        function (data) {
+                            if (data.result == true) {
+                                $('#attentionButton').text("取消关注");
+                            } else {
+                                alert("关注失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                     );
+                } else {
+                    $.post(
+                        "/Attention/RemoveAttention",
+                        { "fromUserId": "@User.Identity.GetUserId()", "toUserId": "@blogerId" },
+                        function (data) {
+                            if (data.result == true) {
+                                $('#attentionButton').text("关注");
+                            } else {
+                                alert("取消关注失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                     );
+                }
+            });
+
+
+            $('#sendLetterButton').click(function () {
+                var title = $('#letterTitle').val();
+                var letter = $('#letterContent').val();
+                if (title.length > 1 && letter.length > 2) {
+                    $.post(
+                        "/PrivateLetter/SendLetter",
+                        { "FromUserId": "@User.Identity.GetUserId()", "ToUserId": "@blogerId", "LetterTitle": title, "LetterContent": letter },
+                        function (data) {
+                            $('#letterModal').modal("hide");
+                            $('#letterTitleValidateMsg').text("");
+                            $('#letterContentValidateMsg').text("");
+                            if (data.result == true) {
+                                alert("私信发送成功！");
+                            } else {
+                                alert("私信发送失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                    );
+                } else {
+                    if (title.length == 0) {
+                        $('#letterTitleValidateMsg').attr("style", "color:red");
+                        $('#letterTitleValidateMsg').text("私信主题不能为空");
+                    }
+                    if (letter.length < 3) {
+                        $('#letterContentValidateMsg').attr("style", "color:red");
+                        $('#letterContentValidateMsg').text("私信内容至少3字以上");
+                    }
+                }
+            });
+
+            $('#sendMessageButton').click(function () {
+                var msg = $('#messageContent').val();
+                if (msg.length > 2) {
+                    $.post(
+                        "/Message/SendMessage",
+                        { "FromUserId": "@User.Identity.GetUserId()", "ToUserId": "@blogerId", "MsgContent": msg },
+                        function (data) {
+                            $('#messageModal').modal("hide");
+                            $('#messageContentValidateMsg').text("");
+                            if (data.result == true) {
+                                alert("留言成功！");
+                            } else {
+                                alert("留言失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                    );
+                } else {
+                    $('#messageContentValidateMsg').attr("style", "color:red");
+                    $('#messageContentValidateMsg').text("留言内容至少3字以上");
+                }
+            });
+        });
+    </script>
+}

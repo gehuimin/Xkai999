@@ -1,0 +1,27 @@
+﻿@model MyBlog.Models.Category
+
+@{
+    ViewBag.Title = "博客分类详情";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>博客分类详情</h2>
+
+<div>
+    <h4>博客分类</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.CategoryId }) |
+    @Html.ActionLink("返回博客分类", "Index")
+</p>

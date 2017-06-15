@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MyBlog.Models.Comment>
+
+@{
+    ViewBag.Title = "我的评论";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的评论</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            评论人
+        </th>
+        <th>
+            评论内容
+        </th>
+        <th>
+            评论的博客
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CommContent)
+        </td>
+        <td>
+            @Html.ActionLink(item.Blog.BlogTitle,"Browse","Blog",new { id=item.BlogId }, null)
+        </td>
+        <td>
+            @Html.ActionLink("删除", "Delete", new { id=item.CommentId })
+        </td>
+    </tr>
+}
+
+</table>

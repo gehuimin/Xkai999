@@ -1,0 +1,12 @@
+﻿@model IEnumerable<MyBlog.Models.Category>
+
+<h2>博客分类</h2>
+<hr/>
+<ul class="nav nav-stacked">
+    @foreach (var item in Model)
+    {
+        <li class="btn btn-lg btn-link" style="margin:2px;padding:2px">
+            @Html.ActionLink(item.CategoryName, "Index", "Home", new { id = item.CategoryId }, new {@style="text-align:left" })
+        </li>
+    }
+</ul>

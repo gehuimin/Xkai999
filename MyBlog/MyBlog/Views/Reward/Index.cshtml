@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MyBlog.Models.Reward>
+
+@{
+    ViewBag.Title = "我的打赏";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的打赏</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            打赏人
+        </th>
+        <th>
+            赏金
+        </th>
+        <th>
+            打赏来源
+        </th>
+        <th>
+            打赏的博客
+        </th>
+        <th>
+            打赏时间
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Money)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaiedFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blog.BlogTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RewardedTime)
+        </td>
+        <td>
+            @Html.ActionLink("删除", "Delete", new { id=item.RewardId })
+        </td>
+    </tr>
+}
+
+</table>

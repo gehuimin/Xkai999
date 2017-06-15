@@ -1,0 +1,48 @@
+﻿@model MyBlog.Models.Blog
+
+@{
+    ViewBag.Title = "博客详情";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>博客详情</h2>
+
+<div>
+    <p class="text-center h2">@Html.DisplayFor(model => model.BlogTitle)</p>
+    <hr />
+    <p>@Html.Raw(Model.BlogContent)</p>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.CategoryName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPrivate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsPrivate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReadedTimes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReadedTimes)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.BlogId }) |
+    @Html.ActionLink("返回我的博客", "Index")
+</p>

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MyBlog.Models.Praise>
+
+@{
+    ViewBag.Title = "我的点赞";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>我的点赞</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            点赞人
+        </th>
+        <th>
+            点赞的博客
+        </th>
+        <th>
+            点选时间
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser.NickName)
+        </td>
+        <td>
+            @Html.ActionLink(item.Blog.BlogTitle, "Browse", "Blog", new { id = item.BlogId },null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PraisedTime)
+        </td>
+        <td>
+            @Html.ActionLink("删除", "Delete", new { id = item.PraiseId })
+        </td>
+    </tr>
+}
+
+</table>

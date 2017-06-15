@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MyBlog.Models.Blog>
+
+@{
+    ViewBag.Title = "推荐博客";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>推荐博客</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            博主
+        </th>
+        <th>
+            博客标题
+        </th>
+        <th>
+            推荐
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bloger.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BlogTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRecommend)
+        </td>
+        <td>
+            @Html.ActionLink("推荐", "Recommend", new { id=item.BlogId }) |
+            @Html.ActionLink("浏览", "Browse", new { id=item.BlogId }) |
+            @Html.ActionLink("删除", "Delete", new { id=item.BlogId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,47 @@
+﻿@model MyBlog.Models.Attention
+
+@{
+    ViewBag.Title = "取消关注";
+    Layout = "~/Views/Shared/_Layout_Profile.cshtml";
+}
+
+<h2>取消关注</h2>
+
+<h3>确定取消关注?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            关注人
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromUser.NickName)
+        </dd>
+
+        <dt>
+            被关注博主
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToUser.NickName)
+        </dd>
+
+        <dt>
+            关注时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="取消关注" class="btn btn-default" /> |
+            @Html.ActionLink("返回我的关注", "Index")
+        </div>
+    }
+</div>

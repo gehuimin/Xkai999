@@ -1,0 +1,161 @@
+﻿@model MyBlog.Models.Blog
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "浏览博客";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.BlogTitle</h2>
+<p><a href="~/Home/Index/@ViewBag.CategoryId?userId=@Model.Bloger.Id">@Model.Bloger.NickName</a> 撰写于 @Model.CreatedTime，阅读  @Model.ReadedTimes，评论 @Model.Comments.Count，点赞 @Model.Prarses.Count，打赏合计 @Model.Rewards.Sum(r => r.Money) 元。  </p>
+<hr />
+<div>@Html.Raw(Model.BlogContent)</div>
+<hr/>
+<div class="text-center">
+    <button id="attentionButton" class="btn btn-default">关注博主</button>
+    <button id="praiseButton" class="btn btn-default">点赞</button>
+    <button id="rewardButton" class="btn btn-default" data-toggle="modal" data-target="#myModal">打赏</button>
+</div>
+<hr />
+@using (Html.BeginForm("Create", "Comment", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <h3>评论</h3>
+    <div class="form-group">
+        <div class="col-md-12">
+            @Html.TextArea("CommContent", new { @class = "form-control textarea", @style = "max-width: 100%" })
+            @Html.ValidationMessage("CommContent", new { @class = "text-danger" })
+        </div>
+    </div>
+    @Html.Hidden("FromUserId", User.Identity.GetUserId())
+    @Html.Hidden("BlogId", Model.BlogId)
+    <div class="form-group">
+        <div class="col-md-12 text-right">
+            <input type="submit" value="发表评论" class="btn btn-primary" />
+        </div>
+    </div>
+
+}
+
+@foreach(var c in Model.Comments)
+{
+    <div class="row" style="border-bottom:1px solid LightGrey">
+        <div class="col-md-1">
+            <span class="h1 mybadge" style="padding:5px;margin:5px">@c.FromUser.NickName.Substring(0, 1)</span>
+        </div>
+        <div class="col-md-11">
+            <p><b>@c.FromUser.NickName</b>&nbsp;&nbsp;@c.CreatedTime</p>
+            <p>@c.CommContent</p>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">打赏</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">打赏金额</label>
+                            <div class="col-md-10">
+                                <input id="Money" type="text" class="form-control" value="2" />
+                                <label id="moneyMsg">打赏金额在 1-10 元之间</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">支付方式</label>
+                            <div class="col-md-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="PaiedFrom" id="inlineRadio1" value="支付宝" checked> 支付宝
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="PaiedFrom" id="inlineRadio2" value="微信支付"> 微信支付
+                                </label>
+                            </div>
+                        </div>
+                   </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="payButton" type="button" class="btn btn-primary">支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#attentionButton').click(function () {
+                if($('#attentionButton').text() == "关注博主"){
+                    $.post(
+                        "/Attention/AddAttention",
+                        { "fromUserId": "@User.Identity.GetUserId()", "toUserId": "@Model.Bloger.Id" },
+                        function (data) {
+                            if (data.result == true) {
+                                $('#attentionButton').text("取消关注博主");
+                            } else {
+                                alert("关注失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                     );
+                } else {
+                    $.post(
+                        "/Attention/RemoveAttention",
+                        { "fromUserId": "@User.Identity.GetUserId()", "toUserId": "@Model.Bloger.Id" },
+                        function (data) {
+                            if (data.result == true) {
+                                $('#attentionButton').text("关注博主");
+                            } else {
+                                alert("取消关注失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                     );
+                }
+            });
+
+            $('#praiseButton').click(function () {
+                if ($('#praiseButton').text().trim() == "点赞") {
+                    $.post(
+                        "/Praise/AddPraise",
+                        {"fromUserId": "@User.Identity.GetUserId()", "blogId": "@Model.BlogId"},
+                        function (data) {
+                            if (data.result == true) {
+                                $('#praiseButton').text("已赞");
+                            } else {
+                                alert("点赞失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                    );
+                }
+            });
+
+            $('#payButton').click(function () {
+                var rmb = $('#Money').val();
+                if (rmb > 0 && rmb <= 10) {
+                    $.post(
+                        "/Reward/Reward",
+                        {"FromUserId": "@User.Identity.GetUserId()", "BlogId": "@Model.BlogId", "Money": rmb, "PaiedFrom": $('input[name="PaiedFrom"]:checked').val()},
+                        function (data) {
+                            $('#myModal').modal('hide');
+                            if (data.result == true) {
+                                alert("谢谢打赏。你的支持是我的动力！");
+                            } else {
+                                alert("打赏失败，请稍后再试！提示：请先登录。");
+                            }
+                        }
+                    );
+                } else {
+                    $('#moneyMsg').attr("style", "color:red");
+                    $('#moneyMsg').text("打赏金额在 1-10 元之间");
+                }
+            });
+        });
+    </script>
+}
